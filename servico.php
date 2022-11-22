@@ -37,7 +37,7 @@
     </header>
     
     <div class="menu-servico">
-            <div class="row"><a class="link-menu-servico" href="servico.php?servico=meuServico">Meus Serviços</a></div>
+            <div class="row row-servico"><a class="link-menu-servico" href="servico.php?servico=meuServico">Meus Serviços</a></div>
             <div class="row"><a class="link-menu-servico" href="servico.php?servico=solicitarServico">Solicitar Novo Serviço</a></div>
         </div>
     <main>

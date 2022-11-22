@@ -27,11 +27,8 @@ nav{/* MENU */
 .navbar-dark .navbar-toggler{/*Botão do menu*/
     z-index: 9;
 }
-.label-mudar-img-conta{
+.label-mudar-img-conta{/*Botao para mudar imagem da conta*/
     width: 100%;
-}
-.nome-conta{
-    color: #fff;
 }
 .img-conta{
     height: 50px;
@@ -122,6 +119,10 @@ td{
 
 header{/*Cabeçalho do site*/
     padding-bottom: 100px;
+}
+
+.row{
+    margin-left: 0!important;
 }
 
 main{/* Corpo do site */
@@ -1187,5 +1188,18 @@ label{
     .table-listar-cliente{
         position: sticky;
         top: 10px;
+    }
+    .col-cargo{
+        min-width: 200px;
+    }
+
+    .menu-servico{
+        margin-top: -130px;
+        z-index: 999;
+        position: absolute;
+    }
+
+    .menu-servico .row-servico{
+        width: 60%;
     }
 }
