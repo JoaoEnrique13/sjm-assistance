@@ -1,7 +1,5 @@
 <?php
- require_once("controller/Controller.php");
- $_SESSION['logado'] = True;
-    session_start();//inicia sessão
+ 	require_once("controller/Controller.php");
     $logado =  $_SESSION['logado'] ?? NULL;//pega sessão que verifica se o usuario esta logado ou nao
     if(empty($logado) || $logado == False || $_SESSION['permissoes'] != "todas" ){//caso o usuario seja cliente, ou um funcionario sem permissoes ele sai da tela de consulta
         die (header('Location: index.php'));
@@ -169,7 +167,7 @@
 							<th scope="col">Código</th>
 							<th scope="col">Nome</th>
 							<th scope="col">Email</th>
-							<th scope="col">Cargo</th>
+							<th scope="col" class="col-cargo">Cargo</th>
 							<th scope="col">Permissões</th>
 							<th scope="col">Conta</th>
 							<th scope="col">Função</th>

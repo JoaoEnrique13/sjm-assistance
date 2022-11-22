@@ -1,6 +1,4 @@
 <?php
-
-session_start();
 //timezone
 
 // conexão com o banco de dados
@@ -34,7 +32,7 @@ class Conexao{
 
     public function entrar($emailLogin, $senhaLogin){
         $stmt = $this->mysqli->query("SELECT * FROM `tbclientes` WHERE `email` = '$emailLogin' AND `senha` = '$senhaLogin';");
-
+        session_start();
         if( $stmt > 0){
             $lista = $stmt->fetch_all(MYSQLI_ASSOC);
         if(count($lista) >=1){//caso a lista seja maior ou igua 1 (se o usuario possuir uma conta com os dados digitados)
@@ -74,11 +72,12 @@ class Conexao{
                 $_SESSION['imgConta'] = $f_lista[0]["imgConta"];
                 $_SESSION['EstadoConta'] = $f_lista['EstadoConta'];
                 header("Location: ../index.php");
-            }else{//caso a conta nao esteja ativado
+            }else{//caso a conta nao esteja ativado não loga e aparece uma mensagem para entrar em contato
                 header("Location: ../entrar.php?contaDesativado=true");
             }
         }else{//caso nao encontre resultado na tabela de cliente, procurar na tabela de funcionario
             $stmt = $this->mysqli->query("SELECT * FROM `tbfuncionario` WHERE `email` = '$emailLogin' AND `senha` = '$senhaLogin';");
+            session_start();
             $lista = $stmt->fetch_all(MYSQLI_ASSOC);
             if(count($lista) >=1){//caso a lista seja maior ou igua 1 (se o usuario possuir uma conta com os dados digitados)
                 $_SESSION['funcionario'] = True;
@@ -107,22 +106,22 @@ class Conexao{
                     $_SESSION['imgConta'] = $f_lista[0]["imgConta"];
                     $_SESSION['permissoes'] = $l['permissoes'];
                     header("Location: ../index.php");
-                }else{
+                }else{//caso a conta nao esteja ativado não loga e aparece uma mensagem para entrar em contato
                     header("Location: ../entrar.php?contaDesativado=true");
                 }
-            }else{
-                $_SESSION['logado'] = FALSE;//define usuario como deslogado=
-                header("Location: ../entrar.php?entrar=semConta");
+            }else{//caso nao encontre nenhum valor (nem na tabela cliente e nem na de funcionarios)
+                $_SESSION['logado'] = FALSE;//define usuario como deslogado
+                header("Location: ../entrar.php?entrar=semConta");//aparece mensagem de sem conta
             }
         }
-    }else{
+    }else{//caso de algum erro
         header("Location: ../entrar.php?entrar=semConta");
         }
-        
-
     }
-    public function atualizarImagemConta($imagemConta, $idUsuario){
 
+    //funcao para mudar a imagem da conta
+    public function atualizarImagemConta($imagemConta, $idUsuario){
+        session_start();
         if($imagemConta['error']){//VERIFICA SE TEVE ALGUM ERRO
             die(header("Location: ../conta.php?alterarImagem=danger"));
         }
@@ -141,28 +140,32 @@ class Conexao{
             $campoId = "id";
          }
 
-         
-         $extensaoImagem = strtolower(pathinfo($imagemConta['name'], PATHINFO_EXTENSION)); //pega extensao do arquivo e deixa em minusculo
-
+         //pega extensao do arquivo e deixa em minusculo
+         $extensaoImagem = strtolower(pathinfo($imagemConta['name'], PATHINFO_EXTENSION));
+         //salva imagem na pasta img/imgConta/idCliente.extensao
          $moverImagem = move_uploaded_file($imagemConta['tmp_name'], $diretorioSalvar . $nomeImagem . "." . $extensaoImagem);//salva imagem no site
-
+         //atualiza nome da imagem no banco de dados
          $stmt = $this->mysqli->query("UPDATE `$table` SET `imgConta` = '$nomeImagem.$extensaoImagem' WHERE $campoId = $id");//insere diretorio no banco de dados
     }
 
+    //funcao para o cliente agendar um servico
     public function agendarServico($idCliente, $marca, $modelo, $descricaoProblema, $formaEnvio, $garantia){
+        //define data e hora do pedido
         date_default_timezone_set('America/Sao_Paulo');
         $timezone = new DateTimeZone('America/Sao_Paulo');//pega data de São Paulo
         $data_hora = date('Y-m-d H:i');//define padrão de data para inserir na tabela (Ano-Mes-Dia Hora:Minuto)
+        //salva no banco
         $stmt = $this->mysqli->query("INSERT INTO `tbservico`(`idCliente`, `marca`, `modelo`, `descricaoProblema`, `formaEnvio`, `garantia`, `dataServico`) 
         VALUES ('$idCliente','$marca','$modelo','$descricaoProblema', '$formaEnvio','$garantia', '$data_hora')");
 
-        $stmt = $this->mysqli->query("SELECT * FROM tbservico");
+        $stmt = $this->mysqli->query("SELECT * FROM tbservico");//lista servico
 
         $listaServico = $stmt->fetch_all(MYSQLI_ASSOC);
         $f_lista = array();//cria um array
         $i = 0;
         $idServico=count($listaServico);
 
+        //atualiza status do pedido
         $stmt = $this->mysqli->query("INSERT INTO `tbstatuspedido`(`idCliente`, `idServico`) VALUES ('$idCliente', '$idServico')");
 
          if( $stmt > 0){
@@ -172,6 +175,7 @@ class Conexao{
          }
     }
 
+    //lista todos os servicos
     public function getServico($id){
         try {
             if($id >=1){
@@ -200,6 +204,7 @@ class Conexao{
         }
     }
 
+    //lista todos os clientes para o funcionario
     public function getClienteFuncionario($id){//lista os clientes para o funcionario
         if($id<=0){
             $stmt = $this->mysqli->query("SELECT * FROM tbclientes");
@@ -251,6 +256,7 @@ class Conexao{
         }
     }
 
+    //lista o status do servico para o cliente
     public function listarStatusServico($id){
         try {
             if($id>=1){
@@ -277,6 +283,7 @@ class Conexao{
         }
     }
 
+    //lista o status do servico para o funcionario
     public function listarServicoFuncionario($id){
         try {
             if($id>=1){
@@ -303,6 +310,7 @@ class Conexao{
         }
     }
 
+    //lista todos os funcionario para a consulta
     public function exibirFuncionario($id){
         try {
             if($id>=1){
@@ -330,6 +338,7 @@ class Conexao{
         }
     }
 
+    //atualiza o servico pelo funcionario
     public function atualizarServico($idServico, $idFuncionario, $statusPedido, $dataEnvio, $mensagemFuncionario){
         try{
             $stmt = $this->mysqli->query("UPDATE `tbstatuspedido` SET `idFuncionario` = $idFuncionario, `statusServico` = '$statusPedido', `dataLevarNotebook` = '$dataEnvio', `mensagemFuncionario` = '$mensagemFuncionario' WHERE `idServico` = $idServico;");
@@ -345,6 +354,7 @@ class Conexao{
         }
     }
 
+    //confirma pedido pelo usuario
     public function verificarPedido($idStatusServico){
         try{
             $stmt = $this->mysqli->query("UPDATE `tbstatuspedido` SET `statusServico` = 'Confirmado pelo usuário' WHERE idStatusPedido = $idStatusServico;");
@@ -352,19 +362,21 @@ class Conexao{
             echo"nao foi";
         }
     }
-    public function cancelarServicoUsuario($idStatusServico){
+    public function cancelarServicoUsuario($idStatusServico){//cancela pedido pelo usuario
         try{
             $stmt = $this->mysqli->query("UPDATE `tbstatuspedido` SET `statusServico` = 'Cancelado pelo usuário' WHERE idStatusPedido = $idStatusServico;");
         }catch(Exception $e){
         }
     }
+
+    //confirma pedido pelo funcionario
     public function cancelarServicoFuncionario($idStatusServico, $idFuncionario, $dataEnvio, $mensagemFuncionario, $idServico){
         try{
             $stmt = $this->mysqli->query("UPDATE `tbstatuspedido` SET `statusServico` = 'Cancelado pelo funcionario', `idFuncionario` = '$idFuncionario', `dataLevarNotebook` = '$dataEnvio', `mensagemFuncionario` = '$mensagemFuncionario' WHERE idStatusPedido = $idStatusServico;");
         }catch(Exception $e){
         }
     }
-
+    //aceita pedido pelo usuario
     public function aceitarPedidoUsuario($idStatusServico){
         try{
             $stmt = $this->mysqli->query("UPDATE `tbstatuspedido` SET `statusServico` = 'Confirmado pelo usuário' WHERE idStatusPedido = $idStatusServico;");
@@ -377,7 +389,7 @@ class Conexao{
 
     }
 
-    public function apagarConta($id, $conta, $nomeFuncionario){
+    public function apagarConta($id, $conta, $nomeFuncionario){//funcao para o funcionario poder apagar conta do cliente ou do funcionario
         try{
             if($conta == "cliente"){
                 $$stmt = $this->mysqli->query("UPDATE `tbclientes` SET `EstadoConta` = 'Desativado por " . $nomeFuncionario ."' WHERE id =" . $id . ";");
@@ -389,7 +401,7 @@ class Conexao{
         }
     }
 
-    public function voltarConta($id, $conta, $nomeFuncionario){
+    public function voltarConta($id, $conta, $nomeFuncionario){//funcao para o funcionario restaurar conta do clienre ou do funcionario
         try{
             if($conta == "cliente"){
                 $$stmt = $this->mysqli->query("UPDATE `tbclientes` SET `EstadoConta` = 'Ativado por " . $nomeFuncionario ."' WHERE id =" . $id . ";");
@@ -401,7 +413,7 @@ class Conexao{
         }
     }
 
-    public function incluirFuncionario($nome, $cargo, $email, $senha, $permissoes){
+    public function incluirFuncionario($nome, $cargo, $email, $senha, $permissoes){//funcao para o adm adicionar um funcionario
         $stmt = $this->mysqli->query("INSERT INTO `tbfuncionario`(`nome`, `cargo`, `email`, `senha`, `permissoes`, `EstadoConta`) VALUES ('$nome', '$cargo', '$email', '$senha', '$permissoes', 'Ativo')");
 
         if( $stmt > 0){
@@ -411,6 +423,7 @@ class Conexao{
         }
     }
 
+    //funcao para o cliente atualizar a propria conta
     public function updateContaCliente($id, $nome, $nomeUsuario, $email, $senha, $cep, $endereco, $numeroCasa, $complemento, $cidade, $estado){
 
         $stmt = $this->mysqli->query("UPDATE `tbclientes` SET `nome` = '$nome', `nomeUsuario` = '$nomeUsuario', `email` = '$email', `senha` = '$senha', `cep` = '$cep', `endereco` = '$endereco', `numero` = '$numeroCasa', `complemento` = '$complemento', `cidade` = '$cidade', `estado` = '$estado'  WHERE id = '" . $id . "'");//insere diretorio no banco de dados
@@ -422,6 +435,7 @@ class Conexao{
         }
     }
 
+    //funcao para o funcionario atualizar a propria conta
     public function updateContaFuncionario($id, $nome, $cargo, $email, $senha, $permissoes){
 
         $stmt = $this->mysqli->query("UPDATE `tbfuncionario` SET `nome` = '$nome', `cargo` = '$cargo', `email` = '$email', `senha` = '$senha', `permissoes` = '$permissoes'  WHERE idFuncionario = '" . $id . "'");//insere diretorio no banco de dados
@@ -443,6 +457,7 @@ class Conexao{
         }
     }
 
+    //funcao enviar codigo de verificacao e alterar senha do usuario
     public function enviarCodEmail($email, $cod){
         $stmt = $this->mysqli->query("SELECT * FROM `tbclientes` WHERE `email` = '$email';");
         $listaDois = $stmt->fetch_all(MYSQLI_ASSOC);
@@ -452,15 +467,11 @@ class Conexao{
             $f_listaDois[$i]['senha'] = $l['senha'];
             $i++;
         }
+
         return $f_listaDois;
 
-        // the message
         $msg = "Sua senha é: \n$f_listaDois[1]";
-
-        // use wordwrap() if lines are longer than 70 characters
         $msg = wordwrap($msg,70);
-
-        // send email
         mail("$email","Recuperação de senha",$msg);
     }
 }

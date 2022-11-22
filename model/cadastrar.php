@@ -3,6 +3,7 @@ require_once("conexao.php");
 
 class Cadastrar extends Conexao {
 
+    //variaveis para armazenar dados do cadastro
     private $id;
     private $nome;
     private $nomeUsuario;
@@ -15,6 +16,7 @@ class Cadastrar extends Conexao {
     private $cidade;
     private $estado;
 
+    //logar
     private $emailLogin;
     private $senhaLogin;
 

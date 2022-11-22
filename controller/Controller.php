@@ -1,6 +1,7 @@
 <?php
+session_start();
 $root = realpath($_SERVER["DOCUMENT_ROOT"]);
-require_once("$root\proj-IBM-11\model\cadastrar.php");
+require_once("$root\proj-IBM\model\cadastrar.php");
 
 class Controller{
 
@@ -29,9 +30,9 @@ class Controller{
             $this->contato();
         }else if(isset($_GET['funcao']) && $_GET['funcao'] == "atualizarFuncionario"){//chama funcao para o administrador atualizar a conta do funcionario
             $this->atualizarFuncionario();
-        }else if(isset($_GET['funcao']) && $_GET['funcao'] == "atualizarPedido"){//chama funcao para o administrador atualizar a conta do funcionario
+        }else if(isset($_GET['funcao']) && $_GET['funcao'] == "atualizarPedido"){//chama funcao para o cliente atualizar o pedido
             $this->atualizarPedido();
-        }else if(isset($_GET['funcao']) && $_GET['funcao'] == "atualizarPedidoFuncionario"){//chama funcao para o administrador atualizar a conta do funcionario
+        }else if(isset($_GET['funcao']) && $_GET['funcao'] == "atualizarPedidoFuncionario"){//chama funcao para o funcionario atualizar o pedido
             $this->atualizarPedidoFuncionario();
         }        
     }
@@ -61,7 +62,7 @@ class Controller{
         $result = $this->cadastrar->logar(); 
     }
 
-    private function logarImagem($email, $senha){//funcao para logar
+    private function logarImagem($email, $senha){//funcao para logar quando trocar a imagem da conta
         $this->cadastrar->setEmailLogin($email);
         $this->cadastrar->setSenhaLogin($senha);
         $result = $this->cadastrar->logar(); 
@@ -142,15 +143,19 @@ class Controller{
         $funcaoAtualizarPedido = $_GET['funcaoAtualizarPedido'];
         if($funcaoAtualizarPedido == "confirmadoPeloUsuario"){
              $this->cadastrar->setIdStatusServico($idStatusServico);
-             $result = $this->cadastrar->confirmarPedidoUsuario(); 
+             $result = $this->cadastrar->confirmarPedidoUsuario();
+             if($result >= 1){
+                echo "<script>location.href=' ../servico.php?servico=meuServico&cancelarPedido=danger'</script>";//manda pra pagina entrar
+            }else{
+                echo "<script>location.href=' ../servico.php?servico=meuServico&cancelarPedido=sucess'</script>";//manda pra pagina entrar
+            }
         }else{
             $this->cadastrar->setIdStatusServico($idStatusServico);
             $result = $this->cadastrar->cancelarPedidoUsuario();  
-
             if($result >= 1){
-                echo "<script>document.href='../servico.php?servico=meuServico&cancelarPedido=danger'</script>";//manda pra pagina entrar
+                echo "<script>location.href=' ../servico.php?servico=meuServico&cancelarPedido=danger'</script>";//manda pra pagina entrar
             }else{
-                echo "<script>document.href='../servico.php?servico=meuServico&cancelarPedido=sucess'</script>";//manda pra pagina entrar
+                echo "<script>location.href=' ../servico.php?servico=meuServico&cancelarPedido=sucess'</script>";//manda pra pagina entrar
             }
         }
     }
@@ -190,7 +195,7 @@ class Controller{
         return $result = $this->cadastrar->listarFuncionario($id);
     }
 
-    public function excluirConta($id, $conta, $nomeFuncionario){//funcao que aceita ou cancela pedio pelo usuario ou pelo funcionario
+    public function excluirConta($id, $conta, $nomeFuncionario){//funcao onde o adm desativa uma conta
             $result = $this->cadastrar->excluirConta($id, $conta, $nomeFuncionario);    
             if($result >= 1){
                 if($conta == "cliente"){
@@ -208,7 +213,7 @@ class Controller{
             }
     }
 
-    public function recuperarConta($id, $conta, $nomeFuncionario){//funcao que aceita ou cancela pedio pelo usuario ou pelo funcionario
+    public function recuperarConta($id, $conta, $nomeFuncionario){//funcao onde o adm ativa uma conta
         $result = $this->cadastrar->recuperarConta($id, $conta, $nomeFuncionario);    
          if($result >= 1){
             if($conta == "cliente"){
@@ -277,7 +282,7 @@ class Controller{
         }
     }
 
-    public function esqueciSenha($email){
+    public function esqueciSenha($email){//manda verificacao por email
         if(isset($_SESSION['logado']) && $_SESSION['logado'] == True){
             $email = $_SESSION['login'];//pega email atual da conta
             $senha = $_SESSION['password'];//pega senha atual da conta
@@ -297,17 +302,7 @@ class Controller{
         }
     }
 
-    public function testeSenha($email, $senha){
-       $email = password_verify($email, "as");
-       echo $email; echo "<br>";
-
-       $senha = password_verify($senha, $password);
-       echo $senha; echo "<br>";
-
-        //echo $f_listaDois[0]['senha'];
-    }
-
-    public function contato(){
+    public function contato(){//mensagem que envia email
         $mensagem = $_POST['txtEmailContato'];
         $tipoMensagem = $_POST['txtTipoMensagem'];
         $mensagem = $_POST['txtMensagem'];
@@ -331,14 +326,7 @@ class Controller{
         $email = $_SESSION['login'];//pega email atual da conta
         $senha = $_SESSION['password'];//pega senha atual da conta
         $result = $this->cadastrar->atualizarContaFuncionario($_GET['id'], $_GET['cargo'], $_GET['permissoes']);
-
-        // $_SESSION = Array();
-        // session_destroy();
-        //echo $_GET['cargo'];
-        // session_start();
-        // $this->cadastrar->setEmailLogin($email);
-        // $this->cadastrar->setSenhaLogin($senha);
-        // $result = $this->cadastrar->logar();
+        
         if($result >= 1){
             header('Location: ../consulta.php?consulta=funcionario&atualizarConta=sucess');//manda pra pagina entrar
         }else{
