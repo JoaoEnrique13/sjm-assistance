@@ -143,10 +143,10 @@
             <?php } }else{ ?>
 
                 <div class="row row-entrar" style="align-items: center;">
-                    <div class="col">
+                    <div class="col col-entrar">
                         <h1 class="titulo-entrar">Já possui uma conta? Entre com seu email e senha.</h1>  
                     </div>
-                    <div class="col">
+                    <div class="col col-entrar">
                         <form class="form-entrar needs-validation" method="post" novalidate action="controller/Controller.php?funcao=logar">
                             <h2>Entre com sua conta</h2>
                             <div class="form-row">
@@ -177,57 +177,6 @@
         </div>
     </main>
 
-     <!-- VALIDAÇÃO DO FORMULARIO -->
-     <script>
-        // Example starter JavaScript for disabling form submissions if there are invalid fields
-        (function() {
-        'use strict';
-        window.addEventListener('load', function() {
-            // Fetch all the forms we want to apply custom Bootstrap validation styles to
-            var forms = document.getElementsByClassName('needs-validation');
-            // Loop over them and prevent submission
-            var validation = Array.prototype.filter.call(forms, function(form) {
-            form.addEventListener('submit', function(event) {
-                if (form.checkValidity() === false) {
-                event.preventDefault();
-                event.stopPropagation();
-                }
-                form.classList.add('was-validated');
-                var input = document.querySelectorAll(".form-control")
-                for(var i=0; i<input.length; i++){
-                    input[i].classList.add("input-erro");
-                }
-            }, false);
-            });
-        }, false);
-        })();
-    </script>
-    <!-- VALIDAÇÃO DO FORMULÁRIO -->
-    <style>
-        @media screen and (max-width: 412px){
-            .container, .row{
-                padding: 0;
-                min-width: 100%;
-                margin: 0;
-            }
-            .col{
-                min-width: 100%;
-            }
-            .titulo-entrar{
-                margin-top: -50px;
-                margin-bottom: 30px;
-            }
-            .col-esqueci-senha{
-                padding: 20px!important;
-            }
-            .col-6{
-                width: 100%;
-            }
-            .row-esqueci-senha{
-                flex-direction: column-reverse;
-            }
-        }
-    </style>
     <!-- Modal para recuperar senha -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">

@@ -1,10 +1,10 @@
 <?php
     session_start();
+    require_once("controller/Controller.php");
     $logado =  $_SESSION['logado'] ?? NULL;//pega sessão que verifica se o usuario esta logado ou nao
 
      if(!$logado) die(header('Location: entrar.php?crieConta=true'));//caso o usuaio nao esteja logado manda redreciona para a pagina de entrar
-     require_once("controller/Controller.php");
-
+     
      if(isset($_SESSION['funcionario']) && $_SESSION['funcionario'] == True){//caso ele seja funcionario redireciona para a tela de controle de servico 
          die(header("Location: controleServico.php"));
      }

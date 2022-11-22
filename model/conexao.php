@@ -2,10 +2,10 @@
 //timezone
 
 // conexão com o banco de dados
-define('BD_SERVIDOR','ec2-34-193-44-192.compute-1.amazonaws.com');
-define('BD_USUARIO','nzbpdwrkemgwpr');
-define('BD_SENHA','bbae7ed2b4ebea6b4787f743ba78e75125bff25f6791159c8dd95c40d9141a34');
-define('BD_BANCO','d6cf8h5e4f8pvq');
+define('BD_SERVIDOR','localhost');
+define('BD_USUARIO','root');
+define('BD_SENHA','');
+define('BD_BANCO','sjm');
 
 class Conexao{
     

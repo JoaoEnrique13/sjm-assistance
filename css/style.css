@@ -167,6 +167,10 @@ footer{/*Rodapé do site*/
     color: #fff;
     font-size: 25px;
 }
+.accordion-body p{ /* texto do accordion da pagina dicas */
+    text-align: justify;
+}
+
 
 .row-esqueci-senha{
     align-items: center;
@@ -1017,7 +1021,7 @@ label{
     }
 }
 
-@media screen and (max-width: 412px){
+@media screen and (max-width: 540px){
     .div-servico{
         flex-wrap: wrap;
     }
@@ -1089,6 +1093,7 @@ label{
     .form-entrar{
         width: 100%!important;
         padding: 10px 20px;
+        margin-top: 60px;
     }
     .col-cadastro{
         padding: 10px!important;
@@ -1202,4 +1207,30 @@ label{
     .menu-servico .row-servico{
         width: 60%;
     }
+    .img-carrousel{/*Imagem do carousel na página home*/
+        height: 33vh;
+    }
+
+    .container-entrar, .row-entrar{
+        padding: 0;
+        min-width: 100%;
+        margin: 0;
+    }
+    .col-entrar{
+        min-width: 100%;
+    }
+    .titulo-entrar{
+        margin-top: 0px;
+        margin-bottom: 5px;
+    }
+    .col-esqueci-senha{
+        padding: 20px!important;
+    }
+    .col-6{
+        width: 100%;
+    }
+    .row-esqueci-senha{
+        flex-direction: column-reverse;
+    }
 }
+
