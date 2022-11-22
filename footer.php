@@ -3,7 +3,7 @@
     <div class="container">
         <div class="row row-links">
             <div class="col-3 col-img-footer">
-                <img src="img/SJM.png" class="logo-footer">
+                <img src="img/sjm.png" class="logo-footer">
             </div>
             <!-- PÁGINAS DE NAVEGAÇÃO NO SITE: -->
             <div class="col-2 col-link">

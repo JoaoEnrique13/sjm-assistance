@@ -9,7 +9,7 @@
         </button>
         <!-- PÁGINAS DE NAVEGAÇÃO NO SITE: -->
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <a class="navbar-brand logo-pc" href="index.php "><img src="img/SJM.png" height="70" alt="" srcset=""></a>
+            <a class="navbar-brand logo-pc" href="index.php "><img src="img/sjm.png" height="70" alt="" srcset=""></a>
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="index.php">Home</a>
@@ -46,7 +46,7 @@
             </ul>
             </div>
             <div class="nome-nav">
-                <img src="img/SJM.png" height="60" class="img-logo-nav-cel" srcset="">
+                <img src="img/sjm.png" height="60" class="img-logo-nav-cel" srcset="">
                 SJM Assistance
             </div>
             <!-- ACESSO PARA AS PÁGINAS DE LOGIN E CADASTRO -->
@@ -79,7 +79,7 @@
             </div>
             <div class="nome-cel">
                 <a class="link-nome-cel" href="index.php">
-                    <img src="img/SJM.png" height="60" alt="" srcset="">
+                    <img src="img/sjm.png" height="60" alt="" srcset="">
                     SJM Assistance
                 </a>
             </div>
