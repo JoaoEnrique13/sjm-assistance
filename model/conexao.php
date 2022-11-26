@@ -10,9 +10,9 @@
 
 //heroku
 define('BD_SERVIDOR','us-cdbr-east-06.cleardb.net');
-define('BD_USUARIO','b5cf66072f3974');
-define('BD_SENHA','43b78306');
-define('BD_BANCO','heroku_e0261504408fe1d'); 
+define('BD_USUARIO','b963a38e33b49e');
+define('BD_SENHA','fd210ef0');
+define('BD_BANCO','heroku_4a6910668bc6eec'); 
 
 //localhost
 // define('BD_SERVIDOR','localhost');
