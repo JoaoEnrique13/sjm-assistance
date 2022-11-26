@@ -31,6 +31,10 @@ class Conexao{
 
     private function conexao(){
         $this->mysqli = new mysqli(BD_SERVIDOR, BD_USUARIO , BD_SENHA, BD_BANCO);
+        $this->mysqli->query("SET NAMES 'utf8'"); 
+        $this->mysqli->query('SET character_set_connection=utf8'); 
+        $this->mysqli->query('SET character_set_client=utf8'); 
+        $this->mysqli->query('SET character_set_results=utf8')
     }
 
     public function cadastrar($nome, $nomeUsuario, $email, $senha, $cep, $endereco, $numeroCasa, $complemento, $cidade, $estado){
